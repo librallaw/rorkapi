@@ -26,6 +26,7 @@ class VideoController extends Controller
         $createVideo = new Video();
         $createVideo->video_title = $request->video_title;
         $createVideo->video_category = $request->video_category;
+        $createVideo->video_banner = $request->video_banner;
         $createVideo->video_file = $request->video_file;//$videoFile;
         $createVideo->save();
 
@@ -55,6 +56,7 @@ class VideoController extends Controller
         $video = Video::find($video_id);
         $video->video_title = $request->video_title;
         $video->video_category = $request->video_category;
+        $video->video_banner = $request->video_banner;
         $video->video_file = $request->video_file;
         $video->save();
 
