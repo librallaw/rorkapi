@@ -1,0 +1,27 @@
+<?php
+
+use App\Http\Controllers\VideoController;
+use Illuminate\Http\Request;
+
+/*
+|--------------------------------------------------------------------------
+| API Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register API routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| is assigned the "api" middleware group. Enjoy building your API!
+|
+*/
+
+//Route::middleware('auth:api')->get('/user', function (Request $request) {
+//    return $request->user();
+//});
+
+Route::get('view/videos', 'VideoController@allVideos')->name('all_videos');
+
+Route::get('show/video/{video_id}', 'VideoController@showVideo')->name('show_video');
+
+Route::post('create/video', 'VideoController@createVideo')->name('create_videos');
+
+Route::patch('update/video/{video_id}', 'VideoController@updateVideo')->name('update_videos');
