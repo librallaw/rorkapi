@@ -36,6 +36,10 @@ Route::get('view/videos', 'VideoController@allVideos')->name('all_videos');
 
 Route::get('show/video/{video_id}', 'VideoController@showVideo')->name('show_video');
 
+Route::post('addTo/playlist', 'PlaylistController@addToPlaylist')->name('addToPlaylist');
+
 Route::post('create/video', 'VideoController@createVideo')->name('create_videos');
+
+Route::post('create/playlist', 'PlaylistController@createPlaylist')->name('create_playlist');
 
 Route::put('update/video/{video_id}', 'VideoController@updateVideo')->name('update_videos');
