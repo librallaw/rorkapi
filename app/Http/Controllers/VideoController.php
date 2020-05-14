@@ -52,7 +52,7 @@ class VideoController extends Controller
             'video_file' => 'required'
         ]);
 
-        $video = Video::where('id', $video_id)->first();
+        $video = Video::find($video_id);
         $video->video_title = $request->video_title;
         $video->video_category = $request->video_category;
         $video->video_file = $request->video_file;
