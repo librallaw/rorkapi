@@ -18,28 +18,34 @@ use Illuminate\Http\Request;
 //    return $request->user();
 //});
 
-Route::get('test',function (){
-
-    $stored_videos = "1-20-3";
-
-    $converted_String = explode("-",$stored_videos);
-    $converted_String[] = "30";
-
-    $revered_string = implode('-',$converted_String);
-
-    dd($revered_string);
-
-
-});
+//Route::get('test',function (){
+//
+//    $stored_videos = "1-20-3";
+//
+//    $converted_String = explode("-",$stored_videos);
+//    $converted_String[] = "30";
+//
+//    $revered_string = implode('-',$converted_String);
+//
+//    dd($revered_string);
+//
+//
+//});
 
 Route::get('view/videos', 'VideoController@allVideos')->name('all_videos');
 
+Route::get('view/playlists', 'PlaylistController@viewAllPlaylist')->name('all_playlist');
+
+Route::get('view/categories', 'CategoryController@viewCategories')->name('all_categories');
+
 Route::get('show/video/{video_id}', 'VideoController@showVideo')->name('show_video');
 
-Route::post('addTo/playlist', 'PlaylistController@addToPlaylist')->name('addToPlaylist');
+Route::post('addTo/playlist/{id}', 'PlaylistController@addToPlaylist')->name('addToPlaylist');
 
 Route::post('create/video', 'VideoController@createVideo')->name('create_videos');
 
 Route::post('create/playlist', 'PlaylistController@createPlaylist')->name('create_playlist');
 
-Route::put('update/video/{video_id}', 'VideoController@updateVideo')->name('update_videos');
+Route::post('create/category', 'CategoryController@createCategory')->name('create_category');
+
+Route::patch('update/video/{id}', 'VideoController@updateVideo')->name('update_videos');

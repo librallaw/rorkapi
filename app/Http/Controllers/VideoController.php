@@ -46,19 +46,21 @@ class VideoController extends Controller
         ]);
     }
 
-    public function updateVideo(Request $request, $video_id){
-        $request->validate([
-            'video_title' => 'required',
+    public function updateVideo(Request $request, $id){
+        $this->validate($request, [
+            'video_title'    => 'required',
             'video_category' => 'required',
-            'video_file' => 'required'
+            'video_file'     => 'required'
         ]);
 
-        $video = Video::find($video_id);
+        $video = Video::where('id', $id)->first();
         $video->video_title = $request->video_title;
         $video->video_category = $request->video_category;
         $video->video_banner = $request->video_banner;
         $video->video_file = $request->video_file;
         $video->save();
+
+
 
 //        dd($video);
 //        $currentVideo = $video->video_file;

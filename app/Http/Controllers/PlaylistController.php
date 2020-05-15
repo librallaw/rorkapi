@@ -29,24 +29,42 @@ class PlaylistController extends Controller
         ]);
     }
 
-    public function addToPlaylist(Request $request){
-        $request->validate([
-           'playlist_id' => 'required'
-        ]);
-        $playlist = Playlist::where('id', $request->playlist_id)->first();
-        $videolist = $playlist->videos;
-        $convertToArray = explode("-",$videolist);
-        $convertToArray[] = '20';
-        $addtolist = implode('-', $convertToArray);
+    public function addToPlaylist(Request $request, $id){
 
-//        return $addtolist;
+        $request->validate([
+           'videos' => 'required',
+        ]);
+
+        $playlist = Playlist::where('id', $id)->first();
+        $videolist = $playlist->videos;
+        $convertToArray = explode('-', $videolist);
+        $convertToArray[] = $request->videos;
+        $addedtolist = implode('-', $convertToArray);
+        $playlist->videos = $addedtolist;
+        $playlist->save();
 
         return response()->json([
             'status' => true,
             'message' => "video added successfully",
-            'data' => $addtolist,
+            'data' => $playlist,
         ]);
 
+    }
 
+
+    public function viewAllPlaylist(){
+        $playlists = Playlist::latest()->get();
+
+        if (count($playlists) > 0){
+            return response()->json([
+                'status' => true,
+                'data' => $playlists,
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'No playlist found',
+            ]);
+        }
     }
 }
