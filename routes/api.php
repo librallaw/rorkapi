@@ -48,4 +48,6 @@ Route::post('create/playlist', 'PlaylistController@createPlaylist')->name('creat
 
 Route::post('create/category', 'CategoryController@createCategory')->name('create_category');
 
-Route::patch('update/video/{id}', 'VideoController@updateVideo')->name('update_videos');
+Route::patch('update/video/{id}', 'VideoController@updateVideo')->name('update_video');
+
+Route::get('delete/video/{id}', 'VideoController@deleteVideo')->name('delete_video');

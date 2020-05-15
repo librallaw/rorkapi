@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Playlist;
 use App\Video;
 use Illuminate\Http\Request;
 
@@ -112,5 +113,26 @@ class VideoController extends Controller
         }
 
 
+    }
+
+
+    public function deleteVideo($id){
+        $video = Video::find($id);
+
+        if($video){
+            $video->delete();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Video deleted successfully',
+            ]);
+
+        } else {
+
+            return response()->json([
+                'status' => false,
+                'message' => 'Not found',
+            ]);
+        }
     }
 }

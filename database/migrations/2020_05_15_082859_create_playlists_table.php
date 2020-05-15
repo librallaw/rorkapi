@@ -17,7 +17,7 @@ class CreatePlaylistsTable extends Migration
             $table->bigIncrements('id');
             $table->string('playlist_title')->nullable();
             $table->string('category_name')->nullable();
-            $table->string('videos')->nullable();
+            $table->string('videos')->nullable()->default(0);
             $table->string('banner')->nullable();
             $table->timestamps();
         });
