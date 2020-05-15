@@ -15,20 +15,27 @@ class VideoController extends Controller
            'video_file' => 'required'
         ]);
 
-//        $videoName = time(). '.' . $request->video_file->getClientOriginalExtension();
-//
-//        $s3 = new \S3('AKIAYIMTQ7ZNUX4GSC57','kNc/d572ntscpDWcwamoTdA8nfqKiZymzBZ6RbgT' );
-//
-//        if ($s3->putObjectFile($request->file('video_file')->path(), "vcp-blw", "timeline/cei/products/images/" . $videoName,
-//            \S3::ACL_PUBLIC_READ)) {
-//            $videoFile = "http://vcp-blw.s3.amazonaws.com/timeline/cei/products/images/".$videoName;
-//        }
+        $videoName = time(). '.' . $request->video_file->getClientOriginalExtension();
+
+        $bannerName = time(). '.' . $request->video_banner->getClientOriginalExtension();
+
+        $s3 = new \S3('AKIAYIMTQ7ZNUX4GSC57','kNc/d572ntscpDWcwamoTdA8nfqKiZymzBZ6RbgT' );
+
+        if ($s3->putObjectFile($request->file('video_banner')->path(), "vcp-blw", "timeline/cei/products/images/" . $bannerName,
+            \S3::ACL_PUBLIC_READ)) {
+            $videoBanner = "http://vcp-blw.s3.amazonaws.com/timeline/cei/products/images/".$bannerName;
+        }
+
+        if ($s3->putObjectFile($request->file('video_file')->path(), "vcp-blw", "timeline/cei/products/images/" . $videoName,
+            \S3::ACL_PUBLIC_READ)) {
+            $videoFile = "http://vcp-blw.s3.amazonaws.com/timeline/cei/products/images/".$videoName;
+        }
 
         $createVideo = new Video();
         $createVideo->video_title = $request->video_title;
         $createVideo->video_category = $request->video_category;
-        $createVideo->video_banner = $request->video_banner;
-        $createVideo->video_file = $request->video_file;//$videoFile;
+        $createVideo->video_banner = $videoBanner;
+        $createVideo->video_file = $videoFile;
         $createVideo->save();
 
         return response()->json([
@@ -64,29 +71,29 @@ class VideoController extends Controller
 
 
 //        dd($video);
-//        $currentVideo = $video->video_file;
-//
-//        if ($request->video_file != $currentVideo){
-//
-//            $videoName = time(). '.' . $request->video_file->getClientOriginalExtension();
-//
-//            $s3 = new \S3('AKIAYIMTQ7ZNUX4GSC57','kNc/d572ntscpDWcwamoTdA8nfqKiZymzBZ6RbgT' );
-//
-//            if ($s3->putObjectFile($request->file('video_file')->path(), "vcp-blw", "timeline/cei/products/images/" . $videoName,
-//                \S3::ACL_PUBLIC_READ)) {
-//                $videoFile = "http://vcp-blw.s3.amazonaws.com/timeline/cei/products/images/".$videoName;
-//            }
-//
-//            $request->merge(['video_file' => $videoName]);
-//
-//            $Video = "http://vcp-blw.s3.amazonaws.com/timeline/cei/products/images/".$currentVideo;
-//
-//            if (file_exists($Video)){
-//                @unlink($Video);
-//            }
-//        }
+        $currentVideo = $video->video_file;
 
-//        $video->update($request->all());
+        if ($request->video_file != $currentVideo){
+
+            $videoName = time(). '.' . $request->video_file->getClientOriginalExtension();
+
+            $s3 = new \S3('AKIAYIMTQ7ZNUX4GSC57','kNc/d572ntscpDWcwamoTdA8nfqKiZymzBZ6RbgT' );
+
+            if ($s3->putObjectFile($request->file('video_file')->path(), "vcp-blw", "timeline/cei/products/images/" . $videoName,
+                \S3::ACL_PUBLIC_READ)) {
+                $videoFile = "http://vcp-blw.s3.amazonaws.com/timeline/cei/products/images/".$videoName;
+            }
+
+            $request->merge(['video_file' => $videoName]);
+
+            $Video = "http://vcp-blw.s3.amazonaws.com/timeline/cei/products/images/".$currentVideo;
+
+            if (file_exists($Video)){
+                @unlink($Video);
+            }
+        }
+
+        $video->update($request->all());
 
         return response()->json([
             'status' => true,
