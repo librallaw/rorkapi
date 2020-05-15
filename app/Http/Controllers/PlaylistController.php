@@ -37,11 +37,23 @@ class PlaylistController extends Controller
 
         $playlist = Playlist::where('id', $id)->first();
         $videolist = $playlist->videos;
-        $convertToArray = explode('-', $videolist);
-        $convertToArray[] = $request->videos;
-        $addedtolist = implode('-', $convertToArray);
-        $playlist->videos = $addedtolist;
-        $playlist->save();
+        if ($videolist == null){
+
+            $convertToArray = explode(' ', $videolist);
+            $convertToArray[] = $request->videos;
+            $addedtolist = implode(' ', $convertToArray);
+            $playlist->videos = $addedtolist;
+            $playlist->save();
+
+        } else {
+
+            $convertToArray = explode('-', $videolist);
+            $convertToArray[] = $request->videos;
+            $addedtolist = implode('-', $convertToArray);
+            $playlist->videos = $addedtolist;
+            $playlist->save();
+        }
+
 
         return response()->json([
             'status' => true,
