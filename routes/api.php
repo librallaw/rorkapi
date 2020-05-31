@@ -34,26 +34,31 @@ use Illuminate\Http\Request;
 
 Route::post('login', 'API\UserController@login');
 Route::post('register', 'API\UserController@register');
+//Route::group(['middleware' => 'auth:api'], function(){
+//    Route::post('details', 'API\UserController@details');
+//});
+
 Route::group(['middleware' => 'auth:api'], function(){
-    Route::post('details', 'API\UserController@details');
+
+    Route::get('view/videos', 'VideoController@allVideos')->name('all_videos');
+
+    Route::get('view/playlists', 'PlaylistController@viewAllPlaylist')->name('all_playlist');
+
+    Route::get('view/categories', 'CategoryController@viewCategories')->name('all_categories');
+
+    Route::get('show/video/{video_id}', 'VideoController@showVideo')->name('show_video');
+
+    Route::post('addTo/playlist/{id}', 'PlaylistController@addToPlaylist')->name('addToPlaylist');
+
+    Route::post('create/video', 'VideoController@createVideo')->name('create_videos');
+
+    Route::post('create/playlist', 'PlaylistController@createPlaylist')->name('create_playlist');
+
+    Route::post('create/category', 'CategoryController@createCategory')->name('create_category');
+
+    Route::patch('update/video/{id}', 'VideoController@updateVideo')->name('update_video');
+
+    Route::get('delete/video/{id}', 'VideoController@deleteVideo')->name('delete_video');
+
+
 });
-
-Route::get('view/videos', 'VideoController@allVideos')->name('all_videos');
-
-Route::get('view/playlists', 'PlaylistController@viewAllPlaylist')->name('all_playlist');
-
-Route::get('view/categories', 'CategoryController@viewCategories')->name('all_categories');
-
-Route::get('show/video/{video_id}', 'VideoController@showVideo')->name('show_video');
-
-Route::post('addTo/playlist/{id}', 'PlaylistController@addToPlaylist')->name('addToPlaylist');
-
-Route::post('create/video', 'VideoController@createVideo')->name('create_videos');
-
-Route::post('create/playlist', 'PlaylistController@createPlaylist')->name('create_playlist');
-
-Route::post('create/category', 'CategoryController@createCategory')->name('create_category');
-
-Route::patch('update/video/{id}', 'VideoController@updateVideo')->name('update_video');
-
-Route::get('delete/video/{id}', 'VideoController@deleteVideo')->name('delete_video');

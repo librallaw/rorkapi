@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Support\Facades\Auth;
-use Validator;
+use \Illuminate\Support\Facades\Validator;
 class UserController extends Controller
 {
     public $successStatus = 200;
