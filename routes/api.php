@@ -56,7 +56,7 @@ Route::group(['middleware' => 'auth:api'], function(){
 
     Route::post('create/category', 'CategoryController@createCategory')->name('create_category');
 
-    Route::patch('update/video/{id}', 'VideoController@updateVideo')->name('update_video');
+    Route::post('update/video/{id}', 'VideoController@updateVideo')->name('update_video');
 
     Route::get('delete/video/{id}', 'VideoController@deleteVideo')->name('delete_video');
 
