@@ -151,23 +151,23 @@ class VideoController extends Controller
         $video = Video::find($id);
 
         if($video){
-            $playlists = Playlist::all();
-            foreach ($playlists as $playlist){
-                $videos = $playlist->videos;
-                $convertToArrays = explode('-', $videos);
-
-//            foreach ($convertToArrays as $convertToArray){
-//                if($convertToArray === $id){
+//            $playlists = Playlist::all();
+//            foreach ($playlists as $playlist){
+//                $videos = $playlist->videos;
+//                $convertToArrays = explode('-', $videos);
 //
-//                }
+////            foreach ($convertToArrays as $convertToArray){
+////                if($convertToArray === $id){
+////
+////                }
+////            }
+//
+//               $updatedList =  array_filter($convertToArrays, $id);
+//
+//               return $updatedList;
+//
+//                exit();
 //            }
-
-               $updatedList =  array_filter($convertToArrays, $id);
-
-               return $updatedList;
-
-                exit();
-            }
 
             $video->delete();
 
