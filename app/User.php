@@ -21,6 +21,12 @@ class User extends Authenticatable
         'name', 'email', 'password',
     ];
 
+
+    public function getDateFormat()
+    {
+        return 'Y-m-d H:i:s.u';
+    }
+
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -38,4 +44,8 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function full_name(){
+        return ucfirst(strtolower($this->first_name))." ".ucfirst(strtolower($this->last_name));
+    }
 }
