@@ -106,10 +106,10 @@ class AuthController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-            'name'     => 'required',
+            'stationName'     => 'required',
             'description'     => 'required',
             'email'         => 'required|email|unique:users',
-            'live_url'         => 'required',
+            'url'         => 'required',
             'password'      => 'required',
         ]);
 
@@ -135,7 +135,7 @@ class AuthController extends Controller
         $user->name    = $request->name;
         $user->description    = $request->description;
         $user->email        = $request->email;
-        $user->live_url        = $request->live_url;
+        $user->url        = $request->url;
         $user->password     = bcrypt($request->password);
         $user->unique_id    = $unique_id;
 

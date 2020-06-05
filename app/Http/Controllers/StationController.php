@@ -32,14 +32,32 @@ class StationController extends Controller
 
             foreach ($stations as $station){
 
+                $listPhoneNumbers = $station->phone_number;
+                $phoneNumbers = explode(',', $listPhoneNumbers);
+
+                $isDvrEnabled =  ($station->is_dvr_enabled == 1) ? true : false;
+                $isLiveChatEnabled =  ($station->is_live_chat_enabled == 1) ? true : false;
+                $isLoginRequired =  ($station->is_login_required == 1) ? true : false;
+
                 $data_arr[] =  array(
-                    "name"=> $station->name,
+                    "stationName"=> $station->name,
                     "description"=> $station->description,
-                    "live_url"=> $station->live_url,
+                    "url"=> $station->url,
                     "email"=> $station->email,
-                    "unique_id"=> $station->unique_id,
+                    "thumbnail"=> $station->thumbnail,
+                    "paypal_id"=> $station->paypal_id,
+                    "phoneNumbers"=> $phoneNumbers,
+                    "id"=> $station->unique_id,
+                    "donateurl"=> $station->donate_url,
+                    "weburl"=> $station->web_url,
+                    "scheduleurl"=> $station->schedule_url,
+                    "kingspaycode"=> $station->kings_pay_code,
+                    "isDvrEnabled"=> $isDvrEnabled,
+                    "isLiveChatEnabled"=> $isLiveChatEnabled,
+                    "numOfComments"=> $station->num_of_comments,
+                    "isLoginRequired"=> $isLoginRequired,
+                    "chatRoom"=> $station->chat_room,
                     "created_at"=> $station->created_at->diffForHumans(),
-                    "updated_at"=> $station->updated_at->diffForHumans(),
                 );
 
             }
@@ -64,7 +82,7 @@ class StationController extends Controller
             'name'     => 'required',
             'description'     => 'required',
             'email'         => 'required|email',
-            'live_url'         => 'required',
+            'url'         => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -82,10 +100,36 @@ class StationController extends Controller
         if ($station) {
             if($station->unique_id == Auth::user()->unique_id) {
 
+                $listPhoneNumbers = $station->phone_number;
+                $phoneNumbers = explode(',',$listPhoneNumbers);
+                foreach ($phoneNumbers as $phoneNumber){
+                    if ($request->phone_number != $phoneNumber){
+                        $phoneNumbers = explode(',', $listPhoneNumbers);
+                        $phoneNumbers[] = $request->phone_number;
+                        $phone_numbers_string = implode(',', $phoneNumbers);
+                    } else {
+
+                        $phoneNumbers = explode(',', $listPhoneNumbers);
+                        $phone_numbers_string = implode(',', $phoneNumbers);
+                    }
+                }
+
+
                 $station->name = $request->name;
                 $station->description = $request->description;
                 $station->email = $request->email;
-                $station->live_url = $request->live_url;
+                $station->url = $request->url;
+                $station->thumbnail = $request->thumbnail;
+                $station->paypal_id = $request->paypal_id;
+                $station->phone_number = $phone_numbers_string;
+                $station->donate_url = $request->donate_url;
+                $station->web_url = $request->web_url;
+                $station->schedule_url = $request->schedule_url;
+                $station->kings_pay_code = $request->kings_pay_code;
+                $station->is_dvr_enabled = $request->is_dvr_enabled;
+                $station->is_live_chat_enabled = $request->is_live_chat_enabled;
+                $station->is_login_required = $request->is_login_required;
+                $station->chat_room = $request->chat_room;
                 $station->save();
 
                 return response()->json([
@@ -117,11 +161,30 @@ class StationController extends Controller
 
         if ($station) {
 
+            $listPhoneNumbers = $station->phone_number;
+            $phoneNumbers = explode(',', $listPhoneNumbers);
+
+            $isDvrEnabled =  ($station->is_dvr_enabled == 1) ? true : false;
+            $isLiveChatEnabled =  ($station->is_live_chat_enabled == 1) ? true : false;
+            $isLoginRequired =  ($station->is_login_required == 1) ? true : false;
+
             $profile[] =  array(
-                "name"=> $station->name,
+                "stationName"=> $station->name,
                 "description"=> $station->description,
-                "live_url"=> $station->live_url,
+                "url"=> $station->url,
                 "email"=> $station->email,
+                "thumbnail"=> $station->thumbnail,
+                "paypal_id"=> $station->paypal_id,
+                "phoneNumbers"=> $phoneNumbers,
+                "donateurl"=> $station->donate_url,
+                "weburl"=> $station->web_url,
+                "scheduleurl"=> $station->schedule_url,
+                "kingspaycode"=> $station->kings_pay_code,
+                "isDvrEnabled"=> $isDvrEnabled,
+                "isLiveChatEnabled"=> $isLiveChatEnabled,
+                "numOfComments"=> $station->num_of_comments,
+                "isLoginRequired"=> $isLoginRequired,
+                "chatRoom"=> $station->chat_room,
                 "unique_id"=> $station->unique_id,
                 "created_at"=> $station->created_at->diffForHumans(),
             );
@@ -163,8 +226,9 @@ class StationController extends Controller
             $newSchedule = new StationSchedule();
             $newSchedule->title = $request->title;
             $newSchedule->station_id = \auth()->user()->unique_id;
-            $newSchedule->start_time = $request->start_time;
-            $newSchedule->end_time = $request->end_time;
+            $newSchedule->schedule_date = \auth()->user()->unique_id;
+            $newSchedule->start_time = strtotime($request->start_time);
+            $newSchedule->end_time = strtotime($request->end_time);
             $newSchedule->save();
 
             return response()->json([
