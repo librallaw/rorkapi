@@ -62,10 +62,11 @@ class AuthController extends Controller
                         [
                             'access_token' => "Bearer ".$tokenResult->accessToken,
                             'token_type' => 'Bearer',
-                            "user"=> [
-                                "first_name"=> Auth::user()->first_name,
-                                "last_name"=>  Auth::user()->last_name,
+                            "station"=> [
+                                "description"=> Auth::user()->description,
+                                "live_url"=>  Auth::user()->live_url,
                                 "email"=> Auth::user()->email,
+                                "name"=> Auth::user()->name,
                                 "unique_id"=> Auth::user()->unique_id,
                             ]
                         ],
@@ -105,9 +106,10 @@ class AuthController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-            'first_name'     => 'required',
-            'last_name'     => 'required',
+            'stationName'     => 'required',
+            'description'     => 'required',
             'email'         => 'required|email|unique:users',
+            'url'         => 'required',
             'password'      => 'required',
         ]);
 
@@ -130,9 +132,10 @@ class AuthController extends Controller
         $unique_id = $messenger->randomId('4','unique_id','users');
 
         $user = new User();
-        $user->first_name    = $request->first_name;
-        $user->last_name    = $request->last_name;
+        $user->name    = $request->name;
+        $user->description    = $request->description;
         $user->email        = $request->email;
+        $user->url        = $request->url;
         $user->password     = bcrypt($request->password);
         $user->unique_id    = $unique_id;
 
@@ -150,9 +153,10 @@ class AuthController extends Controller
                     'access_token' => "Bearer ".$tokenResult->accessToken,
                     'token_type' => 'Bearer',
                     "user"=> [
-                        "first_name"=> $user->first_name,
-                        "last_name"=>  $user->last_name,
+                        "name"=> $user->name,
+                        "description"=>  $user->description,
                         "email"=> $user->email,
+                        "live_url"=> $user->live_url,
                         "unique_id"=> $user->unique_id,
                     ],
                 ],

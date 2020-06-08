@@ -2,103 +2,176 @@
 
 namespace App\Http\Controllers;
 
+use App\Libraries\Messenger;
 use App\Playlist;
 use App\Video;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Validator;
 
 class VideoController extends Controller
 {
-    public function createVideo(Request $request){
-        $request->validate([
-           'video_title' => 'required',
-           'video_category' => 'required',
-           'video_file' => 'required'
+    public function uploadVideo(Request $request,Messenger $messenger){
+
+        $validator = Validator::make($request->all(), [
+            'title' => 'required',
+            'category_id' => 'required',
+            'file' => 'required'
         ]);
 
-        $videoName = time(). '.' . $request->video_file->getClientOriginalExtension();
+        if ($validator->fails()) {
 
-        $bannerName = time(). '.' . $request->video_banner->getClientOriginalExtension();
+            return response()->json([
+                'status'=>false,
+                'message' => 'All fields are required',
+                'errors' =>$validator->errors()->all() ,
+            ], 401);
+
+        }
 
 
-//        $videoFile = $request->video_file->move(public_path('videos'), $videoName);
-//
-//        $videoBanner = $request->video_banner->move(public_path('banners'), $bannerName);
 
-        $s3 = new \S3('AKIAYIMTQ7ZNUX4GSC57','kNc/d572ntscpDWcwamoTdA8nfqKiZymzBZ6RbgT' );
+        $unique_id = $messenger->randomId('6','unique_id','videos');
 
-        if ($s3->putObjectFile($request->file('video_banner')->path(), "vcp-blw", "timeline/cei/products/images/" . $bannerName,
+        $videoName = $unique_id. '.' . $request->file->getClientOriginalExtension();
+        $bannerName = $unique_id. '.' . $request->banner->getClientOriginalExtension();
+
+
+
+        $s3 = new \S3(env('AWS_ACCESS_KEY_ID'),env('AWS_SECRET_ACCESS_KEY') );
+
+        if ($s3->putObjectFile($request->file('banner')->path(), "vcp-blw", "timeline/cei/products/images/".$bannerName,
             \S3::ACL_PUBLIC_READ)) {
             $videoBanner = "http://vcp-blw.s3.amazonaws.com/timeline/cei/products/images/".$bannerName;
         }
 
-        if ($s3->putObjectFile($request->file('video_file')->path(), "vcp-blw", "timeline/cei/products/images/" . $videoName,
+        if ($s3->putObjectFile($request->file('file')->path(), "vcp-blw", "timeline/cei/products/images/".$videoName,
             \S3::ACL_PUBLIC_READ)) {
             $videoFile = "http://vcp-blw.s3.amazonaws.com/timeline/cei/products/images/".$videoName;
         }
 
         $createVideo = new Video();
-        $createVideo->video_title = $request->video_title;
-        $createVideo->video_category = $request->video_category;
-        $createVideo->video_banner = $videoBanner;
-        $createVideo->video_file = $videoFile;
+        $createVideo->title = $request->title;
+        $createVideo->category_id = $request->category_id;
+        $createVideo->banner = $videoBanner;
+        $createVideo->file = $videoFile;
+        $createVideo->unique_id = $unique_id;
+        $createVideo->owner_id = Auth::user()->unique_id;
         $createVideo->save();
 
         return response()->json([
             'status' => true,
-            'message' => "Video created successfully",
-            'data' => $createVideo,
+            'message' =>  "Video created successfully",
+            'data' => [
+
+                "title"=> $createVideo->title,
+                "category_id"=> $createVideo->category_id,
+                "banner"=> $createVideo->banner,
+                "file"=> $createVideo->file,
+                "video_id"=> $createVideo->unique_id,
+                "created_at"=> $createVideo->created_at->diffForHumans(),
+
+            ],
         ]);
     }
 
-    public function showVideo($video_id){
-        $video = Video::find($video_id);
+    public function showVideo(Request $request){
+
+        $validator = Validator::make($request->all(), [
+            'video_id' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+
+            return response()->json([
+                'status'=>false,
+                'message' => 'All fields are required',
+                'errors' =>$validator->errors()->all() ,
+            ], 401);
+
+        }
+
+        $video = Video::where("unique_id",$request->video_id)->first();
+
+        if($video){
+
+            if($video->status !== 1){
+
+                return response()->json([
+                    'status' => false,
+                    'message' => 'This Video has either been deleted or not available for viewing now',
+                ],400);
+            }
+        }else{
+
+            return response()->json([
+                'status' => false,
+                'message' => "Video not found",
+            ],404);
+        }
 
         return response()->json([
             'status' => true,
-            'data' => $video,
+            'data' => [
+                "title"=> $video->title,
+                "banner"=> $video->banner,
+                "file"=> $video->file,
+                "video_id"=> $video->unique_id,
+                "category"=> $video->category->name,
+                "category_id"=> $video->category_id,
+                "owner_id"=> $video->owner->unique_id,
+                "owner_name"=> $video->owner->full_name(),
+                "created_at"=> $video->created_at->diffForHumans(),
+            ],
         ]);
     }
 
-    public function updateVideo(Request $request, $id){
+    public function updateVideo(Request $request){
+
         $this->validate($request, [
-            'video_title'    => 'required',
-            'video_category' => 'required',
-            'video_file'     => 'required'
+            'title'    => 'required',
+            'category' => 'required',
+            'video_id' => 'required',
         ]);
 
-        $videoName = time(). '.' . $request->video_file->getClientOriginalExtension();
+        $s3 = new \S3(env('AWS_ACCESS_KEY_ID'),env('AWS_SECRET_ACCESS_KEY') );
 
-        $bannerName = time(). '.' . $request->video_banner->getClientOriginalExtension();
+        $video = Video::where('unique_id', $request->video_id)->first();
 
-        $s3 = new \S3('AKIAYIMTQ7ZNUX4GSC57','kNc/d572ntscpDWcwamoTdA8nfqKiZymzBZ6RbgT' );
-
-        if ($s3->putObjectFile($request->file('video_banner')->path(), "vcp-blw", "timeline/cei/products/images/" . $bannerName,
-            \S3::ACL_PUBLIC_READ)) {
-            $videoBanner = "http://vcp-blw.s3.amazonaws.com/timeline/cei/products/images/".$bannerName;
-        }
-
-        if ($s3->putObjectFile($request->file('video_file')->path(), "vcp-blw", "timeline/cei/products/images/" . $videoName,
-            \S3::ACL_PUBLIC_READ)) {
-            $videoFile = "http://vcp-blw.s3.amazonaws.com/timeline/cei/products/images/".$videoName;
-        }
-
-//        $videoFile = $request->video_file->move(public_path('videos'), $videoName);
-//
-//        $videoBanner = $request->video_banner->move(public_path('banners'), $bannerName);
-
-        $video = Video::where('id', $id)->first();
         if ($video) {
-            $video->video_title = $request->video_title;
-            $video->video_category = $request->video_category;
-            $video->video_banner = $videoBanner;
-            $video->video_file = $videoFile;
+
+            //check if the user sent a new banner
+            if(!empty($request->file('banner'))){
+                $bannerName = $video->unique_id. '.' . $request->banner->getClientOriginalExtension();
+
+                if ($s3->putObjectFile($request->file('banner')->path(), "vcp-blw", "timeline/cei/products/images/" . $bannerName,
+                    \S3::ACL_PUBLIC_READ)) {
+                    $video->banner = "http://vcp-blw.s3.amazonaws.com/timeline/cei/products/images/".$bannerName;
+                }
+            }
+
+            //check if the user sent a new video file
+            if(!empty($request->file('file'))){
+                $videoName = $video->unique_id. '.' . $request->file->getClientOriginalExtension();
+
+                if ($s3->putObjectFile($request->file('file')->path(), "vcp-blw", "timeline/cei/products/images/" . $videoName,
+                    \S3::ACL_PUBLIC_READ)) {
+                    $video->file = "http://vcp-blw.s3.amazonaws.com/timeline/cei/products/images/".$videoName;
+                }
+
+            }
+
+
+            $video->title = $request->title;
+            $video->category_id = $request->category;
             $video->save();
 
             return response()->json([
                 'status' => true,
                 'message' => "Video updated successfully",
-                'data' => $video,
             ]);
+
+
         } else {
             return response()->json([
                 'status' => false,
@@ -107,111 +180,160 @@ class VideoController extends Controller
         }
 
 
-
-
-//        dd($video);
-//        $currentVideo = $video->video_file;
-//        $currentBanner = $video->video_banner;
-//
-//        if ($request->video_file != $currentVideo && $request->video_banner != $currentBanner){
-//
-//            $videoName = time(). '.' . $request->video_file->getClientOriginalExtension();
-//
-//            $s3 = new \S3('AKIAYIMTQ7ZNUX4GSC57','kNc/d572ntscpDWcwamoTdA8nfqKiZymzBZ6RbgT' );
-//
-//            if ($s3->putObjectFile($request->file('video_file')->path(), "vcp-blw", "timeline/cei/products/images/" . $videoName,
-//                \S3::ACL_PUBLIC_READ)) {
-//                $videoFile = "http://vcp-blw.s3.amazonaws.com/timeline/cei/products/images/".$videoName;
-//            }
-//
-//            $videoName = time(). '.' . $request->video_file->getClientOriginalExtension();
-//
-//            $bannerName = time(). '.' . $request->video_banner->getClientOriginalExtension();
-//
-//
-//            $videoFile = $request->video_file->move(public_path('videos'), $videoName);
-//
-//            $videoBanner = $request->video_banner->move(public_path('banners'), $bannerName);
-//
-//            $request->merge(['video_file' => $videoName]);
-//
-//            $request->merge(['video_banner' => $videoBanner]);
-//
-//            $oldVideo = "http://vcp-blw.s3.amazonaws.com/timeline/cei/products/images/".$currentVideo;
-//
-//            $oldBanner = "http://vcp-blw.s3.amazonaws.com/timeline/cei/products/images/".$currentBanner;
-//
-//            $oldVideo = $request->video_file->move(public_path('videos'), $currentVideo);
-//
-//            $oldBanner = $request->video_banner->move(public_path('banners'), $currentBanner);
-//
-//            if (file_exists($oldVideo) && file_exists($oldBanner)){
-//                @unlink($oldVideo);
-//                @unlink($oldBanner);
-//            }
-//        }
-//
-//        $video->update($request->all());
-
-
-
     }
 
 
     public function allVideos(){
-        $videos = Video::latest()->get();
+
+        $videos = Video::where('status',1)->latest()->get();
 
         if (count($videos) > 0){
+
+            if(isset($_GET['per_page'])){
+                $videos = Video::orderBy("id","desc")->paginate($_GET['per_page']);
+            }else{
+                $videos = Video::orderBy("id","desc")->paginate(10);
+            }
+
+            $data_arr = array();
+
+
+            foreach ($videos as $video){
+
+                $data_arr[] =  array(
+                    "title"=> $video->title,
+                    "banner"=> $video->banner,
+                    "file"=> $video->file,
+                    "video_id"=> $video->unique_id,
+                    "category"=> $video->category->name,
+                    "category_id"=> $video->category_id,
+                    "owner_id"=> $video->owner->unique_id,
+                    "owner_name"=> $video->owner->full_name(),
+                    "created_at"=> $video->created_at->diffForHumans(),
+                );
+
+            }
+
+
             return response()->json([
                 'status' => true,
-                'data' => $videos,
-            ]);
+                'data' =>$data_arr,
+            ],200);
         } else {
             return response()->json([
                 'status' => false,
                 'message' => 'No videos found',
-            ]);
+            ],404);
         }
-
 
     }
 
 
-    public function deleteVideo($id){
-        $video = Video::find($id);
+    public function deleteVideo(Request $request){
 
-        if($video){
-//            $playlists = Playlist::all();
-//            foreach ($playlists as $playlist){
-//                $videos = $playlist->videos;
-//                $convertToArrays = explode('-', $videos);
-//
-////            foreach ($convertToArrays as $convertToArray){
-////                if($convertToArray === $id){
-////
-////                }
-////            }
-//
-//               $updatedList =  array_filter($convertToArrays, $id);
-//
-//               return $updatedList;
-//
-//                exit();
-//            }
+        $validator = Validator::make($request->all(), [
+            'video_id' => 'required',
+        ]);
 
-            $video->delete();
+        if ($validator->fails()) {
 
             return response()->json([
-                'status' => true,
-                'message' => 'Video deleted successfully',
-            ]);
+                'status'=>false,
+                'message' => 'All fields are required',
+                'errors' =>$validator->errors()->all() ,
+            ], 401);
+
+        }
+
+        $video = Video::where('unique_id',$request->video_id)->first();
+
+        if($video){
+
+            if($video->owner_id == Auth::user()->unique_id){
+                $video->status =  9;
+                $video-> save();
+
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Video deleted successfully',
+                ],200);
+
+            }else{
+
+                return response()->json([
+                    'status' => false,
+                    'message' => 'You can only make changes on your own videos',
+                ],401);
+            }
+
+
+
+        } else {
+
+            return response()->json([
+                'status' => false,
+                'message' => 'Video Not found',
+            ],404);
+        }
+    }
+
+
+
+
+    public function activateVideo(Request $request){
+
+        $validator = Validator::make($request->all(), [
+            'video_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+
+            return response()->json([
+                'status'=>false,
+                'message' => 'All fields are required',
+                'errors' =>$validator->errors()->all() ,
+            ], 401);
+
+        }
+
+        $video = Video::where('unique_id',$request->video_id)->first();
+
+        if($video){
+
+            if($video->owner_id == Auth::user()->unique_id){
+
+                if($video->status  != 0){
+                    return response()->json([
+                        'status' => false,
+                        'message' => 'This Video has already been Activated',
+                    ],400);
+                }else{
+                    $video->status =  1;
+                    $video-> save();
+
+                    return response()->json([
+                        'status' => true,
+                        'message' => 'Video Activated successfully',
+                    ],200);
+                }
+
+
+            }else{
+
+                return response()->json([
+                    'status' => false,
+                    'message' => 'You can only make changes on your own videos',
+                ],401);
+            }
+
+
 
         } else {
 
             return response()->json([
                 'status' => false,
                 'message' => 'Not found',
-            ]);
+            ],404);
         }
     }
 }
