@@ -205,7 +205,7 @@ class VideoController extends Controller
                     "banner"=> $video->banner,
                     "file"=> $video->file,
                     "video_id"=> $video->unique_id,
-                    "category"=> $video->category->name,
+                    //"category"=> $video->category->name,
                     "category_id"=> $video->category_id,
                     "owner_id"=> $video->owner->unique_id,
                     "owner_name"=> $video->owner->full_name(),
@@ -333,6 +333,67 @@ class VideoController extends Controller
             return response()->json([
                 'status' => false,
                 'message' => 'Not found',
+            ],404);
+        }
+    }
+
+    public function stationVideos(Request $request){
+
+        $validator = Validator::make($request->all(), [
+            'station_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+
+            return response()->json([
+                'status'=>false,
+                'message' => 'All fields are required',
+                'errors' =>$validator->errors()->all() ,
+            ], 401);
+
+        }
+
+        $stationVideos = Video::where('owner_id', \auth()->user()->unique_id)->get();
+
+//        return $stationVideos;
+//        exit();
+
+        if (count($stationVideos) > 0){
+
+            if(isset($_GET['per_page'])){
+                $stationVideos = Video::where('owner_id', \auth()->user()->unique_id)->orderBy("id","desc")->paginate($_GET['per_page']);
+            }else{
+                $stationVideos = Video::where('owner_id', \auth()->user()->unique_id)->orderBy("id","desc")->paginate(10);
+            }
+
+            $data_arr = array();
+
+            foreach ($stationVideos as $stationVideo){
+
+                $data_arr[] =  array(
+                    "title"=> $stationVideo->title,
+                    "banner"=> $stationVideo->banner,
+                    "file"=> $stationVideo->file,
+                    "video_id"=> $stationVideo->unique_id,
+                    //"category"=> $stationVideo->category->name,
+                    "category_id"=> $stationVideo->category_id,
+                    "owner_id"=> $stationVideo->owner->unique_id,
+                    "owner_name"=> $stationVideo->owner->full_name(),
+                    "created_at"=> $stationVideo->created_at->diffForHumans(),
+                );
+
+            }
+
+
+            return response()->json([
+                'status' => true,
+                'data' =>$data_arr,
+            ],200);
+
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'No videos found',
             ],404);
         }
     }

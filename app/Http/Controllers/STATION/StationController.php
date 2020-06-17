@@ -33,7 +33,7 @@ class StationController extends Controller
 
 
 
-        $station = Station::where('unique_id', $request->id)->first();
+        $station = User::where('unique_id', $request->id)->first();
 
         if ($station) {
 
@@ -58,9 +58,9 @@ class StationController extends Controller
                 "kingspaycode"=> $station->kings_pay_code,
                 "isDvrEnabled"=> $isDvrEnabled,
                 "isLiveChatEnabled"=> $isLiveChatEnabled,
-                "numOfComments"=> $station->numOfComments,
+                "numOfComments"=> $station->num_of_comments,
                 "isLoginRequired"=> $isLoginRequired,
-                "chatRoom"=> $station->chatRoom,
+                "chatRoom"=> $station->chat_room,
                 "unique_id"=> $station->unique_id,
                 "created_at"=> $station->created_at->diffForHumans(),
             );
@@ -145,10 +145,10 @@ class StationController extends Controller
 
             if(isset($_GET['per_page'])){
 
-                $stations = Station::where('active',1)->orderBy("id","asc")->paginate($_GET['per_page']);
+                $stations = Station::orderBy("id","desc")->paginate($_GET['per_page']);
 
             }else{
-                $stations = Station::where('active',1)->orderBy("id","asc")->paginate(10);
+                $stations = Station::orderBy("id","desc")->paginate(10);
             }
 
 
@@ -199,7 +199,4 @@ class StationController extends Controller
         }
 
     }
-
-
-
 }
