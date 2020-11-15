@@ -63,8 +63,7 @@ class AuthController extends Controller
                             'access_token' => "Bearer ".$tokenResult->accessToken,
                             'token_type' => 'Bearer',
                             "user"=> [
-                                "first_name"=> Auth::user()->first_name,
-                                "last_name"=>  Auth::user()->last_name,
+                                "name"=> Auth::user()->name,
                                 "email"=> Auth::user()->email,
                                 "unique_id"=> Auth::user()->unique_id,
                             ]
@@ -150,8 +149,7 @@ class AuthController extends Controller
                     'access_token' => "Bearer ".$tokenResult->accessToken,
                     'token_type' => 'Bearer',
                     "user"=> [
-                        "first_name"=> $user->first_name,
-                        "last_name"=>  $user->last_name,
+                        "name"=> $user->name,
                         "email"=> $user->email,
                         "unique_id"=> $user->unique_id,
                     ],
@@ -191,7 +189,7 @@ class AuthController extends Controller
         }
 
 
-        if(!empty($user = User::where('email', request('email') )->where('country' , request('country')) ->first())){
+        if(!empty($user = User::where('email', request('email')) ->first())){
 
             Auth::login($user);
 
@@ -269,43 +267,65 @@ class AuthController extends Controller
 
         }
 
-        //disable mass assignment protection.
-        //please only use this if you know what u are doing, it is dangerous
+        $reservedNames = array(
+            "Pastor Chris Oyakhilome",
+            "pastor chris oyakhilome",
+            "Pst chris",
+            "Pst chris oyakhilome"
+        );
 
-        User::unguard();
+        if (in_array($request->name, $reservedNames))
+        {
+            return response()->json([
+                'status'=> false,
+                'type'=> 'danger',
+                'message' => 'Sorry you are not allowed to use this name, please fill in a different name, thank you.',
 
-        $unique_id = $messenger->randomId('4','unique_id','users');
+            ]);
+        }
+        else
+        {
+            //disable mass assignment protection.
+            //please only use this if you know what u are doing, it is dangerous
 
-        $user = new User();
-        $user->name    = $request->name;
-        $user->email        = $request->email;
-        $user->country     = $request->country;
-        $user->unique_id    = $unique_id;
+            User::unguard();
 
-        $user->save();
+            $unique_id = $messenger->randomId('15','unique_id','users');
 
-        User::reguard();
+            $user = new User();
+            $user->name    = $request->name;
+            $user->email        = $request->email;
+            $user->country     = $request->country;
+            $user->unique_id    = $unique_id;
+            $user->level    = 1;
 
-        $tokenResult = $user->createToken('Personal Access Token');
+            $user->save();
 
-        return response()->json([
-            'status'        => true,
-            'message'       => 'Registration Successfully!',
-            'data' =>
-                [
-                    'access_token' => "Bearer ".$tokenResult->accessToken,
-                    'token_type' => 'Bearer',
-                    "user"=> [
-                        "name"=> $user->name,
-                        "email"=>  $user->email,
-                        "country"=> $user->country,
-                        "unique_id"=> $user->unique_id,
+            User::reguard();
+
+            $tokenResult = $user->createToken('Personal Access Token');
+
+            return response()->json([
+                'status'        => true,
+                'message'       => 'Registration Successfully!',
+                'data' =>
+                    [
+                        'access_token' => "Bearer ".$tokenResult->accessToken,
+                        'token_type' => 'Bearer',
+                        "user"=> [
+                            "name"=> $user->name,
+                            "email"=>  $user->email,
+                            "country"=> $user->country,
+                            "unique_id"=> $user->unique_id,
+                        ],
                     ],
-                ],
 
 
 
-        ], 200);
+            ], 200);
+        }
+
+
     }
 
 

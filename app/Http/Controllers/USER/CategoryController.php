@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\USER;
 
+use App\Category;
 use App\Http\Controllers\Controller;
 use App\Video;
 use Illuminate\Http\Request;
@@ -13,7 +14,7 @@ class CategoryController extends Controller
     public function categoryVideo(Request $request){
 
         $validator = Validator::make($request->all(), [
-            'id' => 'required',
+            'category_id' => 'required',
         ]);
 
 
@@ -29,14 +30,14 @@ class CategoryController extends Controller
 
 
 
-        $videos = Video::where('category_id',$request->id)->where('status',1)->latest()->get();
+        $videos = Video::where('category_id',$request->category_id)->where('status',1)->latest()->get();
 
         if (count($videos) > 0){
 
             if(isset($_GET['per_page'])){
-                $videos = Video::orderBy("id","desc")->paginate($_GET['per_page']);
+                $videos = Video::where('category_id',$request->category_id)->orderBy("id","desc")->paginate($_GET['per_page']);
             }else{
-                $videos = Video::orderBy("id","desc")->paginate(10);
+                $videos = Video::where('category_id',$request->category_id)->orderBy("id","desc")->paginate(10);
             }
 
             $data_arr = array();
@@ -52,8 +53,8 @@ class CategoryController extends Controller
                     "video_id"=> $video->unique_id,
                     "category"=> $video->category->name,
                     "category_id"=> $video->category_id,
-                    "owner_id"=> $video->owner->unique_id,
-                    "owner_name"=> $video->owner->full_name(),
+                    "owner_id"=> $video->station->unique_id,
+                    "owner_name"=> $video->station->name,
                     "created_at"=> $video->created_at->diffForHumans(),
                 );
 
@@ -71,5 +72,42 @@ class CategoryController extends Controller
             ],404);
         }
 
+    }
+
+
+    public function viewCategories(){
+
+        if(isset($_GET['per_page'])){
+            $categories = Category::paginate($_GET['per_page']);
+        }else{
+            $categories = Category::paginate(10);
+        }
+
+
+        if (count($categories) > 0){
+
+
+            $data_arr = array();
+
+            foreach ($categories as $category){
+
+                $data_arr[] = array(
+                    "name"=> $category->name,
+                    "category_id"=> $category->unique_id
+                );
+            }
+
+
+
+            return response()->json([
+                'status' => true,
+                'data' => $data_arr,
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'No category found',
+            ]);
+        }
     }
 }

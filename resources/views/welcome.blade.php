@@ -84,6 +84,10 @@
                     Laravel
                 </div>
 
+                <video controls>
+                    <source src="http://vcp-blw.s3.amazonaws.com/timeline/cei/products/images/JQ0694.mp4" type="video/mp4">
+                </video>
+
                 <div class="links">
                     <a href="https://laravel.com/docs">Docs</a>
                     <a href="https://laracasts.com">Laracasts</a>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Libraries\Messenger;
 use App\ScheduleDate;
+use App\Station;
 use App\StationSchedule;
 use App\User;
 use App\Video;
@@ -98,7 +99,7 @@ class StationController extends Controller
 
         }
 
-        $station = User::where('unique_id', Auth::user()->unique_id)->first();
+        $station = Station::where('unique_id', Auth::user()->unique_id)->first();
 
         if ($station) {
             if($station->unique_id == Auth::user()->unique_id) {
@@ -160,7 +161,7 @@ class StationController extends Controller
 
     public function stationProfile(){
 
-        $station = User::where('unique_id', Auth::user()->unique_id)->first();
+        $station = Station::where('unique_id', Auth::user()->unique_id)->first();
 
         if ($station) {
 
@@ -387,14 +388,22 @@ class StationController extends Controller
 
     public function statistics(){
 
-        $users = User::where('level', 1)->get();
-        $stations = User::where('level', 2)->get();
-        $videos      = Video::latest()->get();
+        $users          = User::where('level', 1)->get();
+        $recent_users   = User::where('level', 1)->limit(5)->get();
+        $stations       = User::where('level', 2)->get();
+        $videos         = Video::latest()->get();
+        $recent_videos  = Video::latest()->limit(10)->get();
+        $recent_stations  = Station::latest()->limit(5)->get();
 
         $response = array('status' => true, 'data' => array(
+
             'users' => $users,
             'stations' => $stations,
-            'videos' => $videos
+            'videos' => $videos,
+            'recent_users' => $recent_users,
+            'recent_stations' => $recent_stations,
+            'recent_videos' => $recent_videos,
+
         ));
 
         return response($response, 200);
@@ -419,7 +428,7 @@ class StationController extends Controller
 
 
 
-        $stationVideos      = Video::where('owner_id', \auth()->user()->unique_id)->latest()->limit(1)->get();
+        $stationVideos      = Video::where('owner_id', \auth()->user()->unique_id)->latest()->limit(5)->get();
 
         if (count($stationVideos) > 0){
 
@@ -432,7 +441,7 @@ class StationController extends Controller
                     "banner"=> $stationVideo->banner,
                     "file"=> $stationVideo->file,
                     "video_id"=> $stationVideo->unique_id,
-                    "category"=> $stationVideo->category->name,
+                    //"category"=> $stationVideo->category->name,
                     "category_id"=> $stationVideo->category_id,
                     "owner_id"=> $stationVideo->owner->unique_id,
                     "owner_name"=> $stationVideo->owner->full_name(),
@@ -458,6 +467,43 @@ class StationController extends Controller
         }
 
     }
+
+
+
+    public function allScheduleDates(Request $request){
+
+        $stationScheduleDates  = ScheduleDate::where('station_id', \auth()->user()->unique_id)->latest()->get();
+
+        if (count($stationScheduleDates) > 0){
+
+            $data_arr = array();
+
+            foreach ($stationScheduleDates as $stationScheduleDate){
+
+                $data_arr[] =  array(
+                    "date_id"=> $stationScheduleDate->unique_id,
+                    "Schedule_date"=> date('D, M d',$stationScheduleDate->date),
+                );
+
+            }
+
+
+            return response()->json([
+                'status' => true,
+                'data' => $data_arr,
+            ],200);
+
+
+
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'No schedule date has been created',
+            ],404);
+        }
+
+    }
+
 
 
 }
