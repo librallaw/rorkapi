@@ -110,4 +110,66 @@ class CategoryController extends Controller
             ]);
         }
     }
+
+
+    public function HomecategoryVideo(Request $request){
+
+
+
+        if(isset($_GET['per_page'])){
+            $categories = Category::paginate($_GET['per_page']);
+        }else{
+            $categories = Category::paginate(10);
+        }
+
+        $finalData = array();
+
+
+
+
+        if (count($categories) > 0){
+
+
+
+            foreach ($categories as $category){
+
+                $data_arr = array();
+
+                $videos = Video::where('category_id',$category->unique_id)->where('status',1)->take(5)->get();
+
+                foreach ($videos as $video){
+
+
+                    $data_arr[] =  array(
+                        "title"=> $video->title,
+                        "banner"=> $video->banner,
+                        "file"=> $video->file,
+                        "video_id"=> $video->unique_id,
+                        "category"=> $video->category->name,
+                        "category_id"=> $video->category_id,
+                        "owner_id"=> $video->station->unique_id,
+                        "owner_name"=> $video->station->name,
+                        "created_at"=> $video->created_at->diffForHumans(),
+                    );
+
+                }
+
+                $finalData[] = array("title"=>$category->name,'videos'=>$data_arr);
+
+
+            }
+
+
+            return response()->json([
+                'status' => true,
+                'data' =>$finalData,
+            ],200);
+
+        }
+
+
+
+
+
+    }
 }
