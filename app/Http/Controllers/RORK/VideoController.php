@@ -47,4 +47,51 @@ class VideoController extends Controller
             ],
         ]);
     }
+
+
+
+
+
+    public function otherVideos(Request $request, $video_id){
+
+
+        $videos = Video::where("category_id",$video_id)->where("status",1)->take(10)->get();
+
+        if($videos){
+
+
+            $data_arr =  array();
+
+            foreach ($videos as $video){
+
+                $data_arr[] =  array(
+                    "title"=> $video->title,
+                    "banner"=> $video->banner,
+                    "file"=> $video->file,
+                    "video_id"=> $video->unique_id,
+                    "category"=> $video->category->name,
+                    "category_id"=> $video->category_id,
+                    "owner_id"=> $video->station->unique_id,
+                    "owner_name"=> $video->station->name,
+                    "created_at"=> $video->created_at->diffForHumans(),
+                );
+
+            }
+
+
+            return response()->json([
+                'status' => true,
+                'data' =>$data_arr,
+            ]);
+
+
+        }else{
+
+            return response()->json([
+                'status' => false,
+                'message' => "Video not found",
+            ],404);
+        }
+
+    }
 }
