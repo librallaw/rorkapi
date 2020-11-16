@@ -27,8 +27,7 @@ Route::post('/user/register', 'AuthController@register2');
 
 
 Route::get('/home/video/all',       'USER\CategoryController@HomecategoryVideo')     ->name('HomecategoryVideo');
-Route::get('/rork/video/details',  'VideoController@showVideo');
-
+Route::get('/rork/video/details/{video_id}',  'VideoController@showVideo');
 
 
 
