@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\RORK;
 
 use App\Http\Controllers\Controller;
+use App\Video;
 use Illuminate\Http\Request;
 
 class VideoController extends Controller
