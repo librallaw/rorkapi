@@ -119,7 +119,7 @@ class CategoryController extends Controller
         if(isset($_GET['per_page'])){
             $categories = Category::paginate($_GET['per_page']);
         }else{
-            $categories = Category::paginate(10);
+            $categories = Category::take(5)->get();
         }
 
         $finalData = array();
