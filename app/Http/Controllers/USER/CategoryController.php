@@ -135,7 +135,7 @@ class CategoryController extends Controller
 
                 $data_arr = array();
 
-                $videos = Video::where('category_id',$category->unique_id)->where('status',1)->take(5)->get();
+                $videos = Video::where('category_id',$category->unique_id)->where('status',1)->take(4)->get();
 
                 foreach ($videos as $video){
 
