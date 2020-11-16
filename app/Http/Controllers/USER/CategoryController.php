@@ -112,7 +112,7 @@ class CategoryController extends Controller
     }
 
 
-    public function HomecategoryVideo(Request $request){
+    public function HomeCategoryVideo(Request $request){
 
 
 
