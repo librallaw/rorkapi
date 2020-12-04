@@ -33,6 +33,8 @@ Route::get('/home/video/all2',       'RORK\CategoryController@CategoryVid');
 Route::get('/rork/video/details/{video_id}',  'RORK\VideoController@showVideo');
 Route::get('/rork/video/others/{video_id}',  'RORK\VideoController@otherVideos');
 
+Route::get('/rork/videos/category/{video_id}',  'RORK\CategoryController@SingleCategoryVid');
+
 
 
 Route::group(['middleware' => 'auth:api'], function(){

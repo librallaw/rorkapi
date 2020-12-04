@@ -69,4 +69,38 @@ class CategoryController extends Controller
 
 
     }
+
+
+    public function SingleCategoryVid(Request $request,$cat_id){
+
+
+                $videos = Video::where('category_id',$cat_id)->get();
+
+                foreach ($videos as $video){
+
+
+                    $data_arr[] =  array(
+                        "title"=> $video->title,
+                        "banner"=> $video->banner,
+                        "file"=> $video->file,
+                        "video_id"=> $video->unique_id,
+                        "category"=> $video->category->name,
+                        "category_id"=> $video->category_id,
+                        "owner_id"=> $video->station->unique_id,
+                        "owner_name"=> $video->station->name,
+                        "created_at"=> $video->created_at->diffForHumans(),
+                    );
+
+                }
+
+
+
+            return response()->json([
+                'status' => true,
+                'data' => $data_arr,
+            ],200);
+
+        }
+
+
 }
