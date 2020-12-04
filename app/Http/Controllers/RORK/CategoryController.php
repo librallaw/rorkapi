@@ -18,7 +18,7 @@ class CategoryController extends Controller
         if(isset($_GET['per_page'])){
             $categories = Category::paginate($_GET['per_page']);
         }else{
-            $categories = Category::take(5)->get();
+            $categories = Category::take(3)->get();
         }
 
         $finalData = array();
@@ -34,7 +34,7 @@ class CategoryController extends Controller
 
                 $data_arr = array();
 
-                $videos = Video::where('category_id',$category->unique_id)->where('status',1)->take(4)->get();
+                $videos = Video::where('category_id',$category->unique_id)->where('status',1)->take(3)->get();
 
                 foreach ($videos as $video){
 
@@ -53,7 +53,7 @@ class CategoryController extends Controller
 
                 }
 
-                $finalData[] = array("title"=>$category->name,'videos'=>$data_arr);
+                $finalData[] = array("cat_id" => $category->unique_id,"title"=>$category->name,'videos'=>$data_arr);
 
 
             }
