@@ -75,6 +75,7 @@ class CategoryController extends Controller
 
 
                 $videos = Video::where('category_id',$cat_id)->get();
+                $category = Category::where('unique_id',$cat_id)->first();
 
                 foreach ($videos as $video){
 
@@ -97,6 +98,7 @@ class CategoryController extends Controller
 
             return response()->json([
                 'status' => true,
+                'category_name' => $category -> name,
                 'data' => $data_arr,
             ],200);
 
