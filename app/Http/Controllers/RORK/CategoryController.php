@@ -4,6 +4,7 @@ namespace App\Http\Controllers\RORK;
 
 use App\Category;
 use App\Http\Controllers\Controller;
+use App\Product_category;
 use App\Video;
 use Illuminate\Http\Request;
 
@@ -105,4 +106,43 @@ class CategoryController extends Controller
         }
 
 
+    public function viewProductCategories(){
+
+        if(isset($_GET['per_page'])){
+            $categories = Product_category::paginate($_GET['per_page']);
+        }else{
+            $categories = Product_category::paginate(10);
+        }
+
+
+        if (count($categories) > 0){
+
+
+            $data_arr = array();
+
+            foreach ($categories as $category){
+
+                $data_arr[] = array(
+                    "name"=> $category->name,
+                    "unique_id"=> $category->unique_id
+                );
+            }
+
+
+
+            return response()->json([
+                'status' => true,
+                'data' => $data_arr,
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'No category found',
+            ]);
+        }
+    }
+
+
 }
+
+

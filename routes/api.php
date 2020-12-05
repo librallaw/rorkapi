@@ -33,7 +33,17 @@ Route::get('/home/video/all2',       'RORK\CategoryController@CategoryVid');
 Route::get('/rork/video/details/{video_id}',  'RORK\VideoController@showVideo');
 Route::get('/rork/video/others/{video_id}',  'RORK\VideoController@otherVideos');
 
-Route::get('/rork/videos/category/{video_id}',  'RORK\CategoryController@SingleCategoryVid');
+Route::get('/rork/videos/category/{catgory_id}',  'RORK\CategoryController@SingleCategoryVid');
+
+Route::get('/rork/videos/categories',  'RORK\CategoryController@viewProductCategories');
+
+
+Route::get('/rork/product/all',  'RORK\ProductController@viewProducts');
+Route::get('/rork/product/single/{product_id}',  'RORK\ProductController@productDetails');
+
+
+
+
 
 
 
