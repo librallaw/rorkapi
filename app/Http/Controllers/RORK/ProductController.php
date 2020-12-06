@@ -32,6 +32,7 @@ class ProductController extends Controller
                     "category_id"=> $category->category_id,
                     "description"=> $category->description,
                     "price"=> $category->price,
+                    "image"=> $category->image,
                     "unique_id"=> $category->unique_id
                 );
             }
