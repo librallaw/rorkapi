@@ -64,7 +64,9 @@ class ProductController extends Controller
             "category_id"=> $product->category_id,
             "description"=> $product->description,
             "price"=> $product->price,
-            "unique_id"=> $product->unique_id
+            "unique_id"=> $product->unique_id,
+            "image" => $product -> image
+
         );
 
 
