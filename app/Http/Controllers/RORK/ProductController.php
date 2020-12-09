@@ -78,4 +78,37 @@ class ProductController extends Controller
 
 
     }
+
+    public function productRelation($unique_id)
+    {
+
+
+
+        $product_s = Product::where('unique_id',$unique_id)->first();
+
+        $products = Product::where('category_id',$product_s->category_id)->where('unique_id','!=',$unique_id)->get();
+
+
+
+        foreach ($products as $product){
+
+            $data_arr[] = array(
+                "title"=> $product->title,
+                "category_id"=> $product->category_id,
+                "description"=> $product->description,
+                "price"=> $product->price,
+                "unique_id"=> $product->unique_id,
+                "image" => $product -> image
+
+            );
+        }
+
+
+        return response()->json([
+            'status' => true,
+            'data' => $data_arr,
+        ],200);
+
+
+    }
 }

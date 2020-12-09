@@ -40,6 +40,7 @@ Route::get('/rork/videos/categories',  'RORK\CategoryController@viewProductCateg
 
 Route::get('/rork/product/all',  'RORK\ProductController@viewProducts');
 Route::get('/rork/product/single/{product_id}',  'RORK\ProductController@productDetails');
+Route::get('/rork/product/related/{product_id}',  'RORK\ProductController@productRelation');
 
 
 
