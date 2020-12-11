@@ -63,7 +63,9 @@ class AuthController extends Controller
                             'access_token' => "Bearer ".$tokenResult->accessToken,
                             'token_type' => 'Bearer',
                             "user"=> [
-                                "name"=> Auth::user()->name,
+                                "first_name"=> Auth::user()->first_name,
+                                "last_name"=> Auth::user()->last_name,
+                                "age_group"=> Auth::user()->age_group,
                                 "email"=> Auth::user()->email,
                                 "unique_id"=> Auth::user()->unique_id,
                             ]
@@ -108,6 +110,7 @@ class AuthController extends Controller
             'last_name'     => 'required',
             'email'         => 'required|email|unique:users',
             'password'      => 'required',
+            'age_group'      => 'required',
         ]);
 
 
@@ -134,6 +137,7 @@ class AuthController extends Controller
         $user->email        = $request->email;
         $user->password     = bcrypt($request->password);
         $user->unique_id    = $unique_id;
+        $user->age_group    = $request->age_group;
 
         $user->save();
 
