@@ -153,7 +153,8 @@ class AuthController extends Controller
                     'access_token' => "Bearer ".$tokenResult->accessToken,
                     'token_type' => 'Bearer',
                     "user"=> [
-                        "name"=> $user->name,
+                        "first_name"=> $user->first_name,
+                        "last_name"=> $user->last_name,
                         "email"=> $user->email,
                         "unique_id"=> $user->unique_id,
                     ],
