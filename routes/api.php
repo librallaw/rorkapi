@@ -40,6 +40,7 @@ Route::get('/rork/videos/categories',  'RORK\CategoryController@viewProductCateg
 
 Route::get('/rork/product/all',  'RORK\ProductController@viewProducts');
 Route::get('/rork/product/single/{product_id}',  'RORK\ProductController@productDetails');
+
 Route::get('/rork/product/related/{product_id}',  'RORK\ProductController@productRelation');
 
 
@@ -48,7 +49,13 @@ Route::get('/rork/product/related/{product_id}',  'RORK\ProductController@produc
 
 
 
+
+
+
 Route::group(['middleware' => 'auth:api'], function(){
+
+
+    Route::get('/rork/product/purchase/{product_id}',  'RORK\ProductController@purchaseProduct');
 
 
     Route::get('station/schedules/dates',    'StationController@allScheduleDates')      ->name('allScheduleDates');
