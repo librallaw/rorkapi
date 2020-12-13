@@ -12,11 +12,11 @@ class PurchaseController extends Controller
 {
     //
 
-    public function purchaseProduct($product)
+    public function purchaseProduct($product_u)
     {
         //check if user already bought that product
 
-        $check_user_product = Purchase::where("product_id",$product)->where("user_id",Auth::user()->unique_id)->first();
+        $check_user_product = Purchase::where("product_id",$product_u)->where("user_id",Auth::user()->unique_id)->first();
 
         if(!empty($check_user_product)){
 
@@ -26,7 +26,7 @@ class PurchaseController extends Controller
             ]);
         }
 
-        $product = Product::where("unique_id",$product) ->first();
+        $product = Product::where("unique_id",$product_u) ->first();
 
         if(empty($product)){
             return response()->json([
@@ -49,7 +49,7 @@ class PurchaseController extends Controller
 
             $new_purchase =  new Purchase();
 
-            $new_purchase -> product_id = $product;
+            $new_purchase -> product_id = $product_u;
             $new_purchase -> user_id = Auth::user()->unique_id;
             $new_purchase -> amount = $product -> amount;
 
