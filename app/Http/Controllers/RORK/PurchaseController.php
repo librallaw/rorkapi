@@ -51,7 +51,7 @@ class PurchaseController extends Controller
 
             $new_purchase -> product_id = $product_u;
             $new_purchase -> user_id = Auth::user()->unique_id;
-            $new_purchase -> amount = $product -> amount;
+            $new_purchase -> amount = $product -> price;
 
             $new_purchase -> save();
 
