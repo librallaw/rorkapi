@@ -57,6 +57,8 @@ Route::group(['middleware' => 'auth:api'], function(){
 
     Route::get('/rork/product/purchase/{product_id}',  'RORK\PurchaseController@purchaseProduct');
 
+    Route::get('/rork/user/products/all',  'RORK\ProductController@UserProducts');
+
 
     Route::get('station/schedules/dates',    'StationController@allScheduleDates')      ->name('allScheduleDates');
     Route::post('station/profile',           'USER\StationController@stationProfile')   ->name('station_profile_user');

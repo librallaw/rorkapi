@@ -4,7 +4,9 @@ namespace App\Http\Controllers\RORK;
 
 use App\Http\Controllers\Controller;
 use App\Product;
+use App\Purchase;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -108,6 +110,38 @@ class ProductController extends Controller
             'status' => true,
             'data' => $data_arr,
         ],200);
+
+
+    }
+
+
+    public function UserProducts()
+    {
+        $purchases = Purchase::where("use_id", Auth::user()->unique_id) -> get();
+
+        if(count ($purchases) > 0 ){
+
+            foreach ($purchases as $product){
+
+                $data_arr[] = array(
+                    "title"=> $product->product->title,
+                    "category_id"=> $product->product->category_id,
+                    "description"=> $product->product->description,
+                    "price"=> $product->product->price,
+                    "unique_id"=> $product->product->unique_id,
+                    "image" => $product ->product->image
+
+                );
+            }
+
+        }else{
+            return response()->json([
+                'status' => false,
+                'message' => "No product found",
+            ],200);
+
+        }
+
 
 
     }
