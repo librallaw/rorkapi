@@ -134,6 +134,11 @@ class ProductController extends Controller
                 );
             }
 
+            return response()->json([
+                'status' => true,
+                'data' => $data_arr,
+            ],200);
+
         }else{
             return response()->json([
                 'status' => false,
