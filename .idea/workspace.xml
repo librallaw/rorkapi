@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b2f34ad5-bd39-4819-8d88-1d2c790f9369" name="Default Changelist" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/RORK/ProductController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/RORK/ProductController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Purchase.php" afterPath="$PROJECT_DIR$/app/Purchase.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/api.php" afterPath="$PROJECT_DIR$/routes/api.php" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -78,11 +75,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="api.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="api.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/routes/api.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="348">
-              <caret line="59" column="82" lean-forward="true" selection-start-line="59" selection-start-column="82" selection-end-line="59" selection-end-column="82" />
+              <caret line="59" column="39" lean-forward="true" selection-start-line="59" selection-start-column="17" selection-end-line="59" selection-end-column="39" />
               <folding>
                 <element signature="e#7#48#0#PHP" expanded="true" />
               </folding>
@@ -100,11 +97,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ProductController.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="ProductController.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/RORK/ProductController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="90">
-              <caret line="10" column="23" lean-forward="false" selection-start-line="10" selection-start-column="6" selection-end-line="10" selection-end-column="23" />
+            <state relative-caret-position="126">
+              <caret line="121" column="36" lean-forward="true" selection-start-line="121" selection-start-column="36" selection-end-line="121" selection-end-column="36" />
               <folding />
             </state>
           </provider>
@@ -188,8 +185,8 @@
         <option value="$PROJECT_DIR$/app/Http/Controllers/AuthController.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/RORK/PurchaseController.php" />
         <option value="$PROJECT_DIR$/app/Purchase.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/RORK/ProductController.php" />
         <option value="$PROJECT_DIR$/routes/api.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/RORK/ProductController.php" />
       </list>
     </option>
   </component>
@@ -587,12 +584,12 @@
       <workItem from="1607692333456" duration="231000" />
       <workItem from="1607739809749" duration="2245000" />
       <workItem from="1607846581617" duration="477000" />
-      <workItem from="1607872329020" duration="1358000" />
+      <workItem from="1607872329020" duration="1594000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="146249000" />
+    <option name="totallyTimeSpent" value="146485000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="6" />
@@ -972,21 +969,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/RORK/ProductController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="10" column="23" lean-forward="false" selection-start-line="10" selection-start-column="6" selection-end-line="10" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/routes/api.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="348">
-          <caret line="59" column="82" lean-forward="true" selection-start-line="59" selection-start-column="82" selection-end-line="59" selection-end-column="82" />
+          <caret line="59" column="39" lean-forward="true" selection-start-line="59" selection-start-column="17" selection-end-line="59" selection-end-column="39" />
           <folding>
             <element signature="e#7#48#0#PHP" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/RORK/ProductController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="121" column="36" lean-forward="true" selection-start-line="121" selection-start-column="36" selection-end-line="121" selection-end-column="36" />
+          <folding />
         </state>
       </provider>
     </entry>

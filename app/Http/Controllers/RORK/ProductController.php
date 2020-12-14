@@ -117,7 +117,7 @@ class ProductController extends Controller
 
     public function UserProducts()
     {
-        $purchases = Purchase::where("use_id", Auth::user()->unique_id) -> get();
+        $purchases = Purchase::where("user_id", Auth::user()->unique_id) -> get();
 
         if(count ($purchases) > 0 ){
 
