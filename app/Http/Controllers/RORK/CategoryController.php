@@ -159,6 +159,7 @@ class CategoryController extends Controller
 
             foreach ($categories as $category){
 
+
                 $data_arr[] = array(
                     "key"=> $category->unique_id,
                     "title"=> $category->name
