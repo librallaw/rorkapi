@@ -78,6 +78,9 @@ class CategoryController extends Controller
                 $videos = Video::where('category_id',$cat_id)->get();
                 $category = Category::where('unique_id',$cat_id)->first();
 
+
+               // dd($videos);
+
                 foreach ($videos as $video){
 
 
@@ -88,6 +91,8 @@ class CategoryController extends Controller
                         "video_id"=> $video->unique_id,
                         "category"=> $video->category->name,
                         "category_id"=> $video->category_id,
+                        "owner_id"=> $video->station->unique_id,
+                        "owner_name"=> $video->station->name,
                         "created_at"=> $video->created_at->diffForHumans(),
                     );
 
@@ -97,6 +102,7 @@ class CategoryController extends Controller
 
             return response()->json([
                 'status' => true,
+                'category_name' => $category -> name,
                 'data' => $data_arr,
             ],200);
 
