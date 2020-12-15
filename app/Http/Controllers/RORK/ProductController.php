@@ -152,5 +152,36 @@ class ProductController extends Controller
     }
 
 
+    public function SingleCategoryProduct(Request $request,$cat_id){
+
+        // dd($videos);
+
+        $products = Product::where('category_id',$cat_id)->get();
+
+
+
+        foreach ($products as $product){
+
+            $data_arr[] = array(
+                "title"=> $product->title,
+                "category_id"=> $product->category_id,
+                "description"=> $product->description,
+                "price"=> $product->price,
+                "unique_id"=> $product->unique_id,
+                "image" => $product -> image
+
+            );
+        }
+
+
+
+        return response()->json([
+            'status' => true,
+            'data' => $data_arr,
+        ],200);
+
+    }
+
+
 
 }
