@@ -37,6 +37,8 @@ Route::get('/rork/videos/category/{catgory_id}',  'RORK\CategoryController@Singl
 
 Route::get('/rork/videos/categories',  'RORK\CategoryController@viewProductCategories');
 
+Route::get('/rork/videos/format/categories',  'RORK\CategoryController@formatCategory');
+
 
 Route::get('/rork/product/all',  'RORK\ProductController@viewProducts');
 Route::get('/rork/product/single/{product_id}',  'RORK\ProductController@productDetails');

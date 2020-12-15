@@ -143,6 +143,43 @@ class CategoryController extends Controller
     }
 
 
+    public function formatCategory()
+    {
+        if(isset($_GET['per_page'])){
+            $categories = Product_category::paginate($_GET['per_page']);
+        }else{
+            $categories = Product_category::paginate(10);
+        }
+
+
+        if (count($categories) > 0){
+
+
+            $data_arr = array();
+
+            foreach ($categories as $category){
+
+                $data_arr[] = array(
+                    "title"=> $category->name,
+                    "key"=> $category->unique_id
+                );
+            }
+
+
+
+            return response()->json([
+                'status' => true,
+                'data' => $data_arr,
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'No category found',
+            ]);
+        }
+    }
+
+
 }
 
 
