@@ -161,7 +161,7 @@ class CategoryController extends Controller
 
 
                 $data_arr[] = array(
-                    "key"=> $category->unique_id,
+                    "key"=> $category->id,
                     "title"=> $category->name
 
                 );
