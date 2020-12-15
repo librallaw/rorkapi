@@ -88,8 +88,6 @@ class CategoryController extends Controller
                         "video_id"=> $video->unique_id,
                         "category"=> $video->category->name,
                         "category_id"=> $video->category_id,
-                        "owner_id"=> $video->station->unique_id,
-                        "owner_name"=> $video->station->name,
                         "created_at"=> $video->created_at->diffForHumans(),
                     );
 
