@@ -160,8 +160,9 @@ class CategoryController extends Controller
             foreach ($categories as $category){
 
                 $data_arr[] = array(
-                    "title"=> $category->name,
                     "key"=> $category->unique_id
+                    "title"=> $category->name,
+
                 );
             }
 
