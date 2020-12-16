@@ -50,9 +50,9 @@ class PurchaseController extends Controller
 
 
 
-            $update = User::where("unique_id",Auth::user()->unique_id) -> first();
-            $update -> coins = ($update -> coins) - ($product -> price);
-            $update -> save();
+//            $update = User::where("unique_id",Auth::user()->unique_id) -> first();
+//            $update -> coins = ($update -> coins) - ($product -> price);
+//            $update -> save();
 
 
             $new_purchase =  new Purchase();
