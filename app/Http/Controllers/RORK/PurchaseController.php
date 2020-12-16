@@ -5,6 +5,7 @@ namespace App\Http\Controllers\RORK;
 use App\Http\Controllers\Controller;
 use App\Product;
 use App\Purchase;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -54,6 +55,11 @@ class PurchaseController extends Controller
             $new_purchase -> amount = $product -> price;
 
             $new_purchase -> save();
+
+
+            $update = User::where("unique_id") -> Auth::user()->unique_id -> first();
+            $update -> coins = $update -> coins - $product -> price;
+            $update -> save();
 
             return response()->json([
                 'status' =>true,
