@@ -122,7 +122,7 @@
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/RORK/PurchaseController.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="204">
-              <caret line="52" column="13" lean-forward="true" selection-start-line="52" selection-start-column="13" selection-end-line="54" selection-end-column="32" />
+              <caret line="52" column="11" lean-forward="true" selection-start-line="52" selection-start-column="11" selection-end-line="54" selection-end-column="30" />
               <folding />
             </state>
           </provider>
@@ -595,12 +595,12 @@
       <workItem from="1607692333456" duration="231000" />
       <workItem from="1607739809749" duration="2245000" />
       <workItem from="1607846581617" duration="477000" />
-      <workItem from="1607872329020" duration="6260000" />
+      <workItem from="1607872329020" duration="6396000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="151151000" />
+    <option name="totallyTimeSpent" value="151287000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="6" />
@@ -999,7 +999,7 @@
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/RORK/PurchaseController.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="204">
-          <caret line="52" column="13" lean-forward="true" selection-start-line="52" selection-start-column="13" selection-end-line="54" selection-end-column="32" />
+          <caret line="52" column="11" lean-forward="true" selection-start-line="52" selection-start-column="11" selection-end-line="54" selection-end-column="30" />
           <folding />
         </state>
       </provider>
