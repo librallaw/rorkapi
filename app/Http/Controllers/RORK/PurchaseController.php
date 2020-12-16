@@ -48,6 +48,11 @@ class PurchaseController extends Controller
             ]);
         }else{
 
+            $update = User::where("unique_id") -> Auth::user()->unique_id -> first();
+            $update -> coins = $update -> coins - $product -> price;
+            $update -> save();
+
+
             $new_purchase =  new Purchase();
 
             $new_purchase -> product_id = $product_u;
@@ -57,9 +62,7 @@ class PurchaseController extends Controller
             $new_purchase -> save();
 
 
-            $update = User::where("unique_id") -> Auth::user()->unique_id -> first();
-            $update -> coins = $update -> coins - $product -> price;
-            $update -> save();
+
 
             return response()->json([
                 'status' =>true,
