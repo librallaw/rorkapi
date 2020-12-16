@@ -48,7 +48,7 @@ class PurchaseController extends Controller
             ]);
         }else{
 
-            $update = User::where("unique_id") -> Auth::user()->unique_id -> first();
+            $update = User::where("unique_id",Auth::user()->unique_id) -> first();
             $update -> coins = $update -> coins - $product -> price;
             $update -> save();
 
