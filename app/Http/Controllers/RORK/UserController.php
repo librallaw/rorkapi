@@ -16,7 +16,7 @@ class UserController extends Controller
             "first_name" => Auth::user()->first_name,
             "last_name" => Auth::user()->last_name,
             "email" => Auth::user()->email,
-            "first_name" => Auth::user()->coins,
+            "coins" => Auth::user()->coins,
         );
 
 
