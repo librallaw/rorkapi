@@ -21,7 +21,7 @@ class ReadController extends Controller
 
             $product = Product::where("unique_id",$product_id)->first();
 
-            var_dump($product);exit;
+
 
             $data_arr = array(
                 "title"=> $product->title,
