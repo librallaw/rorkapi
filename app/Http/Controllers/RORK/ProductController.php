@@ -54,6 +54,46 @@ class ProductController extends Controller
     }
 
 
+
+    public function viewFeaturedProducts(){
+
+
+        $products = Product::where('featured',1)->get();
+
+
+        if (count($products) > 0){
+
+
+            $data_arr = array();
+
+            foreach ($products as $category){
+
+
+                $data_arr[] = array(
+                    "title"=> $category->title,
+                    "category_id"=> $category->category_id,
+                    "description"=> $category->description,
+                    "price"=> $category->price,
+                    "image"=> $category->image,
+                    "unique_id"=> $category->unique_id
+                );
+            }
+
+
+
+            return response()->json([
+                'status' => true,
+                'data' => $data_arr,
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'No category found',
+            ]);
+        }
+    }
+
+
     public function productDetails($unique_id)
     {
 
