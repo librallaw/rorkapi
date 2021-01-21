@@ -50,6 +50,9 @@ Route::get('/rork/product/related/{product_id}',  'RORK\ProductController@produc
 Route::get('/rork/product/categories/{product_id}',  'RORK\ProductController@SingleCategoryProduct');
 
 
+Route::get('/rork/special/video/',  'RORK\SpecialController@returnSpecialVideo');
+
+
 
 
 
