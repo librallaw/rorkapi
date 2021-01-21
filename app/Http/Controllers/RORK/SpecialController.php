@@ -20,6 +20,7 @@ class SpecialController extends Controller
 
             $data_arr[] = array(
                 "link"=> $product->video,
+                "title"=> $product->title,
                 "created" => $product->created_at ->diffForHumans()
             );
 
