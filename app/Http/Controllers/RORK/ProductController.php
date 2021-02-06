@@ -94,29 +94,53 @@ class ProductController extends Controller
     }
 
 
-    public function productDetails($unique_id)
+    public function productDetails($unique_id,$user_id)
     {
 
 
 
+        $puchases = Purchase::where("user_id",$user_id)->where("product_id",$unique_id) -> first();
+
+        if(!empty($puchases)){
+            $purchased = true;
+        }else{
+            $purchased = false;
+
+        }
+
+
         $product = Product::where('unique_id',$unique_id)->first();
 
-        $data_arr[] = array(
-            "title"=> $product->title,
-            "category_id"=> $product->category_id,
-            "description"=> $product->description,
-            "price"=> $product->price,
-            "unique_id"=> $product->unique_id,
-            "image" => $product -> image
+        if(!empty($product)){
 
-        );
+            $data_arr[] = array(
+                "title"=> $product->title,
+                "category_id"=> $product->category_id,
+                "description"=> $product->description,
+                "price"=> $product->price,
+                "unique_id"=> $product->unique_id,
+                "image" => $product -> image,
+                "purchased" => $purchased
+
+            );
 
 
 
-        return response()->json([
-            'status' => true,
-            'data' => $data_arr,
-        ],200);
+            return response()->json([
+                'status' => true,
+                'data' => $data_arr,
+            ],200);
+
+        }else{
+
+            return response()->json([
+                'status' => false,
+                'message' => "Product not found",
+            ],200);
+
+        }
+
+
 
 
     }
