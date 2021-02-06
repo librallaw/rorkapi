@@ -116,6 +116,7 @@ class ProductController extends Controller
             $data_arr[] = array(
                 "title"=> $product->title,
                 "category_id"=> $product->category_id,
+                "category_name"=> $product->category->name,
                 "description"=> $product->description,
                 "price"=> $product->price,
                 "unique_id"=> $product->unique_id,
