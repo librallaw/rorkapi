@@ -44,7 +44,7 @@ Route::get('/rork/product/all',  'RORK\ProductController@viewProducts');
 
 Route::get('/rork/product/featured/all',  'RORK\ProductController@viewFeaturedProducts');
 
-Route::get('/rork/product/single/{product_id},{user_id}',  'RORK\ProductController@productDetails');
+Route::get('/rork/product/single/{product_id}/{user_id}',  'RORK\ProductController@productDetails');
 
 Route::get('/rork/product/related/{product_id}',  'RORK\ProductController@productRelation');
 Route::get('/rork/product/categories/{product_id}',  'RORK\ProductController@SingleCategoryProduct');
